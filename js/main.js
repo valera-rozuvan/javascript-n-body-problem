@@ -14,9 +14,7 @@
         }
     });
 
-    require(['jquery'], function ($) {
-        var width, height;
-
+    require(['jquery', 'v_canvas'], function ($, VCanvas) {
         $.noConflict();
 
         $(document).ready(onReady);
@@ -24,89 +22,26 @@
         return;
 
         function onReady() {
-            onResize();
+            var config, vCanvas;
 
-            window.addEventListener('deviceorientation', onResize);
-            $(window).resize(onResize);
-
-            setupCanvas();
-            draw();
-        }
-
-        function onResize() {
-            var $container = $('#canvas_container');
-
-            width = $container.width();
-            height = $container.height();
-
-            if ($('#my_canvas').length) {
-                clearCanvas();
-                resizeCanvas();
-                draw();
-            }
-        }
-
-        function setupCanvas() {
-            var $canvas, canvasEl;
-
-            $canvas = $(
-                '<canvas />',
-                { 'id': 'my_canvas' }
-            );
-
-            canvasEl = $canvas[0];
-
-            canvasEl.width = width;
-            canvasEl.height = height;
-
-            $('#canvas_container').append($canvas);
-
-            console.log(canvasEl);
-
-            draw();
+            config = {
+                containerId: 'canvas_container',
+                resize: 'with_container',
+                callbacks: {
+                    attach: [draw],
+                    clearCanvas: [draw]
+                }
+            };
+            vCanvas = new VCanvas(config);
+            vCanvas.configure();
+            vCanvas.attach();
         }
 
         function draw() {
-            var $canvas = $('#my_canvas'),
-                canvasEl, ctx;
-
-            canvasEl = $canvas[0];
-
-            if (!canvasEl.getContext) {
-                return;
-            }
-
-            ctx = canvasEl.getContext('2d');
-
-            ctx.fillStyle = 'rgb(200,0,0)';
-            ctx.fillRect(10, 10, 40, 40);
-            ctx.fillStyle = 'rgba(0,0,200,0.5)';
-            ctx.fillRect(width - 50, height - 50, 40, 40);
-        }
-
-        function clearCanvas() {
-            var $canvas = $('#my_canvas'),
-                canvasEl, ctx;
-
-            canvasEl = $canvas[0];
-
-            if (!canvasEl.getContext) {
-                return;
-            }
-
-            ctx = canvasEl.getContext('2d');
-
-            ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-        }
-
-        function resizeCanvas() {
-            var $canvas = $('#my_canvas'),
-                canvasEl, ctx;
-
-            canvasEl = $canvas[0];
-
-            canvasEl.width = width;
-            canvasEl.height = height;
+            this.ctx.fillStyle = 'rgb(200,0,0)';
+            this.ctx.fillRect(10, 10, 40, 40);
+            this.ctx.fillStyle = 'rgba(0,0,200,0.5)';
+            this.ctx.fillRect(this.width - 50, this.height - 50, 40, 40);
         }
     });
 }).call(this);
