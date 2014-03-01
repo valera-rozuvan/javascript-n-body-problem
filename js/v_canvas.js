@@ -26,9 +26,17 @@
             this._configured = true;
 
             this._callCallbacks('configure', callback);
+
+            return this;
         };
 
         VCanvas.prototype.attach = function (callback) {
+            if (this.config.memoryOnly === true) {
+                console.log('ERROR: memory only - can\'t attach to container!');
+
+                return;
+            }
+
             if (typeof this._attached !== 'undefined') {
                 console.log('ERROR: attach() method was already invoked!');
 
@@ -39,13 +47,21 @@
             this.$container.append(this.$canvas);
             this._attached = true;
 
-            // Now can dettach again.
+            // Now can detach again.
             delete this._detached;
 
             this._callCallbacks('attach', callback);
+
+            return this;
         };
 
         VCanvas.prototype.detach = function (callback) {
+            if (this.config.memoryOnly === true) {
+                console.log('ERROR: memory only - can\'t detach from container!');
+
+                return;
+            }
+
             if (typeof this._detached !== 'undefined') {
                 console.log('ERROR: detach() method was already invoked!');
 
@@ -53,19 +69,50 @@
             }
 
             this._detached = null;
-            this.$container.detach();
+            this.$canvas.detach();
             this._detached = true;
 
             // Now can attach again.
             delete this._attached;
 
             this._callCallbacks('detach', callback);
+
+            return this;
         };
 
         VCanvas.prototype.clearCanvas = function (callback) {
             this.ctx.clearRect(0, 0, this.width, this.height);
 
             this._callCallbacks('clearCanvas', callback);
+
+            return this;
+        };
+
+        VCanvas.prototype.resizeCanvas = function (callback) {
+            if (this.config.resize === 'never') {
+                conole.log('ERROR: config.resize is set to "never"!');
+
+                return;
+            }
+
+            this.canvasEl.width = this.width;
+            this.canvasEl.height = this.height;
+
+            this._callCallbacks('resizeCanvas', callback);
+
+            return this;
+        };
+
+        VCanvas.prototype.addCallback = function (methodName, callback) {
+            if (!this.callbacks.hasOwnProperty(methodName)) {
+                console.log('ERROR: Trying to add callback for non-existent method "' + methodName + '".');
+
+                return;
+            }
+
+            this.callbacks[methodName].push(callback);
+
+            return this;
         };
 
 
@@ -75,16 +122,15 @@
             this.width = this.$container.width();
             this.height = this.$container.height();
 
-            this._resizeCanvas();
+            this.resizeCanvas();
             this.clearCanvas();
         };
 
-        VCanvas.prototype._resizeCanvas = function () {
-            this.canvasEl.width = this.width;
-            this.canvasEl.height = this.height;
-        };
-
         VCanvas.prototype._configureContainer = function () {
+            if (this.config.memoryOnly === true) {
+                return;
+            }
+
             if (!this.config.containerId) {
                 this.config.containerId = 'body';
             } else {
@@ -107,8 +153,22 @@
             );
             this.canvasEl = this.$canvas[0];
 
-            this.canvasEl.width = this.width;
-            this.canvasEl.height = this.height;
+            if (this.config.memoryOnly === true) {
+                if (typeof this.config.width === 'number') {
+                    this.canvasEl.width = this.cofig.width;
+                } else {
+                    this.canvasEl.width = 200;
+                }
+
+                if (typeof this.config.height === 'number') {
+                    this.canvasEl.height = this.cofig.height;
+                } else {
+                    this.canvasEl.height = 200;
+                }
+            } else {
+                this.canvasEl.width = this.width;
+                this.canvasEl.height = this.height;
+            }
 
             if (!this.canvasEl.getContext) {
                 console.log('ERROR: getContext() method is not supported!');
@@ -122,7 +182,9 @@
         VCanvas.prototype._configureResizing = function () {
             var _this = this;
 
-            if (
+            if (this.config.memoryOnly === true || this.config.resize === 'manual') {
+                this.config.resize = 'manual';
+            } else if (
                 !this.config.resize ||
                 (this.config.resize !== 'with_container' && this.config.resize !== 'never')
             ) {
@@ -146,7 +208,8 @@
                 configure: [],
                 attach: [],
                 detach: [],
-                clearCanvas: []
+                clearCanvas: [],
+                resizeCanvas: []
             };
 
             if (!this.config.callbacks) {
