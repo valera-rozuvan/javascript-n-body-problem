@@ -242,4 +242,4 @@
 
         return VCanvas;
     });
-}());
+}).call(this);

@@ -1,4 +1,6 @@
 (function (undefined) {
+    'use strict';
+
     define(['jquery'], function ($) {
         var VFuncQueue = function (config) {
             if (typeof config === 'undefined' || !$.isPlainObject(config)) {
@@ -80,4 +82,4 @@
 
         return VFuncQueue;
     });
-}());
+}).call(this);
