@@ -136,4 +136,4 @@
     return VImgCollection;
 
     });
-}());
+}).call(this);
