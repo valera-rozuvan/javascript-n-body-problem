@@ -1,4 +1,4 @@
-(function (undefined) {
+(function (window, undefined) {
     'use strict';
 
     define(['jquery'], function ($) {
@@ -82,4 +82,4 @@
 
         return VFuncQueue;
     });
-}).call(this);
+}).call(this, this);
