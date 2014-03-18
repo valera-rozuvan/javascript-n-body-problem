@@ -1,4 +1,22 @@
-(function (window, undefined) {
+/*global
+    define: false, console: false, window: false
+*/
+
+/*jslint
+    browser: false, white: false, indent: 4, maxlen: 120, nomen: true
+*/
+
+/*properties
+    $canvas, $container, _attached, _callCallbacks, _configureCallbacks,
+    _configureCanvas, _configureContainer, _configureResizing, _configured,
+    _detached, _onResize, addCallback, addEventListener, append, apply, attach,
+    call, callbacks, canvasEl, clearCanvas, clearRect, cofig, config, configure,
+    containerEl, containerId, ctx, detach, each, getContext, hasOwnProperty,
+    height, id, isArray, isFunction, log, memoryOnly, prototype, push, resize,
+    resizeCanvas, width
+*/
+
+(function () {
     'use strict';
 
     // Imported via a `define()` call.
@@ -16,7 +34,7 @@
     // Public methods.
 
     VCanvas.prototype.configure = function (callback) {
-        if (typeof this._configured !== 'undefined') {
+        if (this._configured !== undefined) {
             console.log('ERROR: configure() method was already invoked!');
 
             return;
@@ -43,7 +61,7 @@
             return;
         }
 
-        if (typeof this._attached !== 'undefined') {
+        if (this._attached !== undefined) {
             console.log('ERROR: attach() method was already invoked!');
 
             return;
@@ -68,7 +86,7 @@
             return;
         }
 
-        if (typeof this._detached !== 'undefined') {
+        if (this._detached !== undefined) {
             console.log('ERROR: detach() method was already invoked!');
 
             return;
@@ -96,7 +114,7 @@
 
     VCanvas.prototype.resizeCanvas = function (callback) {
         if (this.config.resize === 'never') {
-            conole.log('ERROR: config.resize is set to "never"!');
+            console.log('ERROR: config.resize is set to "never"!');
 
             return;
         }
@@ -142,7 +160,7 @@
         } else {
             this.config.containerId = '#' + this.config.containerId;
         }
-        this.$container = $(this.config.containerId)
+        this.$container = $(this.config.containerId);
         this.containerEl = this.$container[0];
 
         this.width = this.$container.width();
@@ -192,7 +210,9 @@
             this.config.resize = 'manual';
         } else if (
             !this.config.resize ||
-            (this.config.resize !== 'with_container' && this.config.resize !== 'never')
+                (
+                    this.config.resize !== 'with_container' && this.config.resize !== 'never'
+                )
         ) {
             this.config.resize = 'never';
         }
@@ -248,10 +268,10 @@
 
     // Make the VCanvas module available via Require JS `define()` method.
     // Require VCanvas module dependencies.
-    define(modDeps, function () {
-        $            = arguments[0];
-        randomString = arguments[1];
+    define(modDeps, function (_$, _randomString) {
+        $            = _$;
+        randomString = _randomString;
 
         return VCanvas;
     });
-}).call(this, this);
+}());
