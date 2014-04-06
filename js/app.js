@@ -1,28 +1,21 @@
 /*global
-    define: false, console: true
+    define: false
 */
 
 /*jslint
-    browser: false, white: false, indent: 4, maxlen: 120, nomen: true
+    browser: true, white: false, indent: 4, maxlen: 120, nomen: true, plusplus: false
 */
 
-/*properties
-    onReadyCallback, containerId, resize, attach, draw, clearCanvas, callbacks, vCanvas, configure, bind, onXKey, vIC,
-    load, done, onVICDone, ctx, fillStyle, fillRect, width, height, draw2, putImageData, log, imageData, length,
-    _attached, attach, _detached, detach, imgObj, get, addCallback, onClearCanvas, call
-*/
-
-(function () {
+(function jsWrapper_app() {
     'use strict';
 
-    // Imported via a `require()` call.
-    var VCanvas, VImgCollection, Mousetrap,
+    var modDeps, modCallback,
+        VCanvas, VImgCollection, Mousetrap,
+        app;
 
-        modDeps, defineCallback,
+    app = {};
 
-        app = {};
-
-    app.onReadyCallback = function () {
+    app.onReadyCallback = function onReadyCallback() {
         var config = {
             containerId: 'canvas_container',
             resize: 'with_container',
@@ -45,20 +38,20 @@
             .done(app.onVICDone);
     };
 
-    app.draw = function () {
+    app.draw = function draw() {
         this.ctx.fillStyle = 'rgb(200,0,0)';
         this.ctx.fillRect(10, 10, 40, 40);
         this.ctx.fillStyle = 'rgba(0,0,200,0.5)';
         this.ctx.fillRect(this.width - 50, this.height - 50, 40, 40);
     };
 
-    app.draw2 = function (imgObj, dx, dy) {
+    app.draw2 = function draw2(imgObj, dx, dy) {
         console.log('imgObj = ', imgObj);
 
         this.ctx.putImageData(imgObj.imageData, dx, dy);
     };
 
-    app.onXKey = function (event, keyCombo) {
+    app.onXKey = function onXKey(event, keyCombo) {
         console.log('[onXKey]: arguments.length = ', arguments.length);
         console.log('[onXKey]: arguments = ', arguments);
 
@@ -74,7 +67,7 @@
         }
     };
 
-    app.onVICDone = function () {
+    app.onVICDone = function onVICDone() {
         app.imgObj = this.get('boat');
 
         app.vCanvas.addCallback('clearCanvas', app.onClearCanvas);
@@ -82,12 +75,16 @@
         app.draw2.call(app.vCanvas, app.imgObj, 80, 80);
     };
 
-    app.onClearCanvas = function () {
+    app.onClearCanvas = function onClearCanvas() {
         app.draw2.call(app.vCanvas, app.imgObj, 80, 80);
     };
 
-    defineCallback = function (_VCanvas, _VImgCollection, _Mousetrap) {
-        // Make imported modules available outside of this function's scope.
+    // Module dependencies.
+    modDeps = ['v_canvas', 'v_img_collection', 'mousetrap'];
+
+    // Module callback. It will run as soon as all module dependencies have been loaded.
+    modCallback = function modCallback(_VCanvas, _VImgCollection, _Mousetrap) {
+        // Make dependencies visible outside of this function's scope.
         VCanvas        = _VCanvas;
         VImgCollection = _VImgCollection;
         Mousetrap      = _Mousetrap;
@@ -95,8 +92,6 @@
         return app;
     };
 
-    // Module dependencies.
-    modDeps = ['v_canvas', 'v_img_collection', 'mousetrap'];
-
-    define(modDeps, defineCallback);
-}());
+    // Module initialization.
+    define(modDeps, modCallback);
+}).call(this);

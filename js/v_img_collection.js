@@ -1,12 +1,19 @@
-(function (undefined) {
+/*global
+    define: false
+*/
+
+/*jslint
+    browser: true, white: false, indent: 4, maxlen: 120, nomen: true, plusplus: false
+*/
+
+(function jsWrapper_v_img_collection() {
     'use strict';
 
-    define(
-        ['jquery', 'random_string', 'v_func_queue', 'v_canvas'],
-        function ($, randomString, VFuncQueue, VCanvas)
-    {
+    var modDeps, modCallback,
+        $, randomString, VFuncQueue, VCanvas,
+        VImgCollection;
 
-    var VImgCollection = function (config) {
+    VImgCollection = function VImgCollection(config) {
         this._config = config;
 
         this._collection = {};
@@ -15,10 +22,10 @@
 
     // Public methods.
 
-    VImgCollection.prototype.load = function (friendlyName, url) {
+    VImgCollection.prototype.load = function load(friendlyName, url) {
         var _this;
 
-        if (typeof this._doneLoading !== 'undefined') {
+        if (this._doneLoading !== undefined) {
             console.log('ERROR: done() method for this collection already called!');
 
             return;
@@ -55,7 +62,7 @@
         return this;
     };
 
-    VImgCollection.prototype.done = function (callback) {
+    VImgCollection.prototype.done = function done(callback) {
         var collectionLength = 0,
             _this = this,
             vfq = (new VFuncQueue({
@@ -115,7 +122,7 @@
         return this;
     };
 
-    VImgCollection.prototype.get = function (friendlyName, index) {
+    VImgCollection.prototype.get = function get(friendlyName, index) {
         if (typeof index !== 'number') {
             index = 0;
         }
@@ -126,14 +133,27 @@
 
     // Private methods.
 
-    VImgCollection.prototype._addUrlToCollection = function (friendlyName, url) {
+    VImgCollection.prototype._addUrlToCollection = function _addUrlToCollection(friendlyName, url) {
         this._collection[friendlyName].push({
             id: randomString(),
             url: url
         });
     };
 
-    return VImgCollection;
+    // Module dependencies.
+    modDeps = ['jquery', 'random_string', 'v_func_queue', 'v_canvas'];
 
-    });
+    // Module callback. It will run as soon as all module dependencies have been loaded.
+    modCallback = function modCallback(_$, _randomString, _VFuncQueue, _VCanvas) {
+        // Make dependencies visible outside of this function's scope.
+        $ = _$;
+        randomString = _randomString;
+        VFuncQueue = _VFuncQueue;
+        VCanvas = _VCanvas;
+
+        return VImgCollection;
+    };
+
+    // Module initialization.
+    define(modDeps, modCallback);
 }).call(this);

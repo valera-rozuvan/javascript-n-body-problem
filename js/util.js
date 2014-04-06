@@ -1,31 +1,26 @@
 /*global
-    window: false, define: false, console: true
+    define: false
 */
 
 /*jslint
-    browser: false, white: false, indent: 4, maxlen: 120, nomen: true
+    browser: true, white: false, indent: 4, maxlen: 120, nomen: true, plusplus: false
 */
 
-/*properties
-    isFunction, toString, hasOwnProperty, call, prototype, constructor, emptyFunction, checkForConsoleLog,
-    _checkForConsoleLog, console, isFunction, log, configConsoleLog, enableConsoleLog, logOld
-*/
-
-(function () {
+(function jsWrapper_util() {
     'use strict';
 
-    // Imported via a `require()` call.
-    var modDeps,
-        defineCallback,
-        util = {};
+    var modDeps, modCallback,
+        util;
 
-    util.isFunction = function (func) {
+    util = {};
+
+    util.isFunction = function isFunction(func) {
         var getType = {},
             parent = func.constructor && func.constructor.prototype,
             getClass,
             hasProperty;
 
-        getClass    = getType.toString;
+        getClass = getType.toString;
         hasProperty = getType.hasOwnProperty;
 
         if (typeof func !== 'function') {
@@ -43,11 +38,11 @@
         return true;
     };
 
-    util.emptyFunction = function () {
+    util.emptyFunction = function emptyFunction() {
         return;
     };
 
-    util._checkForConsoleLog = function () {
+    util._checkForConsoleLog = function _checkForConsoleLog() {
         // Support for browser's that don't have `window.console.log()` method.
         if (window.console === undefined) {
             window.console = {};
@@ -57,7 +52,7 @@
         }
     };
 
-    util.configConsoleLog = function (_enableConsoleLog) {
+    util.configConsoleLog = function configConsoleLog(_enableConsoleLog) {
         // Make sure we actually have a `console.log()` to work with.
         util._checkForConsoleLog();
 
@@ -76,12 +71,14 @@
         }
     };
 
-    defineCallback = function () {
-        return util;
-    };
-
     // Module dependencies.
     modDeps = [];
 
-    define(modDeps, defineCallback);
-}());
+    // Module callback. It will run as soon as all module dependencies have been loaded.
+    modCallback = function modCallback() {
+        return util;
+    };
+
+    // Module initialization.
+    define(modDeps, modCallback);
+}).call(this);

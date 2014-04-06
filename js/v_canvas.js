@@ -1,34 +1,22 @@
 /*global
-    define: false, console: false, window: false
+    define: false
 */
 
 /*jslint
-    browser: false, white: false, indent: 4, maxlen: 120, nomen: true
+    browser: true, white: false, indent: 4, maxlen: 120, nomen: true, plusplus: false
 */
 
-/*properties
-    $canvas, $container, _attached, _callCallbacks, _configureCallbacks,
-    _configureCanvas, _configureContainer, _configureResizing, _configured,
-    _detached, _onResize, addCallback, addEventListener, append, apply, attach,
-    call, callbacks, canvasEl, clearCanvas, clearRect, cofig, config, configure,
-    containerEl, containerId, ctx, detach, each, getContext, hasOwnProperty,
-    height, id, isArray, isFunction, log, memoryOnly, prototype, push, resize,
-    resizeCanvas, width
-*/
-
-(function () {
+(function jsWrapper_v_canvas() {
     'use strict';
 
-    // Imported via a `define()` call.
-    var $, randomString,
+    var modDeps, modCallback,
+        $, randomString,
 
-        // Our module.
-        VCanvas = function (config) {
-            this.config = config;
-        },
+        VCanvas;
 
-        // Module dependencies.
-        modDeps = ['jquery', 'random_string'];
+    VCanvas = function VCanvas(config) {
+        this.config = config;
+    };
 
 
     // Public methods.
@@ -263,15 +251,18 @@
         }
     };
 
+    // Module dependencies.
+    modDeps = ['jquery', 'random_string'];
 
-    // Export the module.
-
-    // Make the VCanvas module available via Require JS `define()` method.
-    // Require VCanvas module dependencies.
-    define(modDeps, function (_$, _randomString) {
-        $            = _$;
+    // Module callback. It will run as soon as all module dependencies have been loaded.
+    modCallback = function modCallback(_$, _randomString) {
+        // Make dependencies visible outside of this function's scope.
+        $  = _$;
         randomString = _randomString;
 
         return VCanvas;
-    });
-}());
+    };
+
+    // Module initialization.
+    define(modDeps, modCallback);
+}).call(this);
