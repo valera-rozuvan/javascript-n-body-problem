@@ -16,9 +16,15 @@
 
   util.isFunction = function isFunction(func) {
     var getType = {},
-      parent = func.constructor && func.constructor.prototype,
+      parent,
       getClass,
       hasProperty;
+
+    if (typeof func === 'undefined' || func === null || !func) {
+      return false;
+    }
+
+    parent = func.constructor && func.constructor.prototype;
 
     getClass = getType.toString;
     hasProperty = getType.hasOwnProperty;
