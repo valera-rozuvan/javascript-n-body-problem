@@ -1,10 +1,10 @@
-# JavaScript physics
+# JavaScript n-body problem
 
-Demonstrating physical concepts with JavaScript.
+Demonstrating n-body problem with JavaScript.
 
 ## Demo
 
-[https://valera-rozuvan.github.io/javascript-physics](https://valera-rozuvan.github.io/javascript-physics/src/index.html)
+See live version [here](https://valera-rozuvan.github.io/javascript-n-body-problem/src/index.html)
 
 ## Description
 
