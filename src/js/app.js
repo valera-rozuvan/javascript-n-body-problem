@@ -99,7 +99,7 @@
   };
 
   // Module dependencies.
-  modDeps = ['v_canvas', 'v_img_collection', 'mousetrap'];
+  modDeps = ['v_canvas', 'v_img_collection', 'mousetrap', 'util'];
 
   // Module callback. It will run as soon as all module dependencies have been loaded.
   modCallback = function modCallback(_VCanvas, _VImgCollection, _Mousetrap, _util) {
