@@ -9,9 +9,13 @@
 (function jsWrapper_v_img_collection() {
   'use strict';
 
-  var modDeps, modCallback,
-    $, randomString, VFuncQueue, VCanvas,
-    VImgCollection;
+  var modDeps;
+  var modCallback;
+  var $;
+  var randomString;
+  var VFuncQueue;
+  var VCanvas;
+  var VImgCollection;
 
   VImgCollection = function VImgCollection(config) {
     this._config = config;
@@ -63,17 +67,23 @@
   };
 
   VImgCollection.prototype.done = function done(callback) {
-    var collectionLength = 0,
-      _this = this,
-      vfq = (new VFuncQueue({
+    var collectionLength = 0;
+    var _this = this;
+
+    var vfq = (
+      new VFuncQueue({
         interval: 20
-      })).startProcessing(),
-      vc = (new VCanvas({
+      })
+    ).startProcessing();
+
+    var vc = (
+      new VCanvas({
         inMemory: true,
         width: 10,
         height: 10,
         resize: 'manual'
-      })).configure();
+      })
+    ).configure();
 
     this._doneLoading = null;
 
