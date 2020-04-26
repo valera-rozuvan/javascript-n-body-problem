@@ -10,7 +10,7 @@
   'use strict';
 
   var modDeps, modCallback,
-    VCanvas, VImgCollection, Mousetrap,
+    VCanvas, VImgCollection, Mousetrap, util,
     app;
 
   app = {};
@@ -25,11 +25,14 @@
       }
     };
 
+    app.enableLogs = true;
+
     app.vCanvas = (new VCanvas(config))
       .configure()
       .attach();
 
     Mousetrap.bind('x', app.onXKey, 'keypress');
+    Mousetrap.bind('l', app.onLKey, 'keypress');
 
     app.vIC = (new VImgCollection())
       .load('boat', 'images/01.jpeg')
@@ -67,6 +70,22 @@
     }
   };
 
+  app.onLKey = function onLKey(event, keyCombo) {
+    console.log('[onXKey]: arguments.length = ', arguments.length);
+    console.log('[onXKey]: arguments = ', arguments);
+
+    console.log('event = ', event);
+    console.log('keyCombo', keyCombo);
+
+    if (app.enableLogs) {
+      app.enableLogs = false;
+    } else {
+      app.enableLogs = true;
+    }
+
+    util.configConsoleLog(app.enableLogs);
+  };
+
   app.onVICDone = function onVICDone() {
     app.imgObj = this.get('boat');
 
@@ -83,11 +102,12 @@
   modDeps = ['v_canvas', 'v_img_collection', 'mousetrap'];
 
   // Module callback. It will run as soon as all module dependencies have been loaded.
-  modCallback = function modCallback(_VCanvas, _VImgCollection, _Mousetrap) {
+  modCallback = function modCallback(_VCanvas, _VImgCollection, _Mousetrap, _util) {
     // Make dependencies visible outside of this function's scope.
     VCanvas = _VCanvas;
     VImgCollection = _VImgCollection;
     Mousetrap = _Mousetrap;
+    util = _util;
 
     return app;
   };

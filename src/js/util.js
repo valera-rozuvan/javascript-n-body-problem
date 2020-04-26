@@ -58,7 +58,7 @@
 
     if (_enableConsoleLog === true || _enableConsoleLog === false) {
       util.enableConsoleLog = _enableConsoleLog;
-    } else if (util.enableConsoleLog !== true && util.enableConsoleLog !== false) {
+    } else {
       util.enableConsoleLog = true;
     }
 
@@ -68,6 +68,8 @@
     if (util.enableConsoleLog === false) {
       window.console.logOld = window.console.log;
       window.console.log = util.emptyFunction;
+    } else if (util.isFunction(window.console.logOld)) {
+      window.console.log = window.console.logOld;
     }
   };
 
