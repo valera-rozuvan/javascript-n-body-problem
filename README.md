@@ -1,9 +1,7 @@
-javascript-physics
-==================
+# JavaScript physics
 
 Demonstrating physical concepts with JavaScript.
 
-Demo
-----
+## Demo
 
 [https://valera-rozuvan.github.io/javascript-physics](https://valera-rozuvan.github.io/javascript-physics)
