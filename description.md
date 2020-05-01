@@ -1,5 +1,7 @@
 # Description
 
+**Below description is deprecated** Need to revise this document according to new vision - this repo will serve the purpose of showing how N bodies move through space in a gravitational field.
+
 What is this about? Ehh...
 
 ## Mission
